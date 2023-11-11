@@ -56,7 +56,6 @@
   <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <ItemGroup>
     <Folder Include="Properties" />
-    <Folder Include="External Resources\" />
     <Folder Include="ETL\" />
     <Folder Include="ETL\Tables\" />
     <Folder Include="ETL\Functions\" />
@@ -64,7 +63,6 @@
     <Folder Include="Security\" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="External Resources\cred_managed_identity.sql" />
     <Build Include="ETL\Tables\SourceSchemaVersion.sql" />
     <Build Include="ETL\Tables\SourceIncrementalLoad.sql" />
     <Build Include="ETL\Tables\SourceTable.sql" />
