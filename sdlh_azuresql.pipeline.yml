@@ -1,0 +1,76 @@
+parameters:
+- name: pat_token
+  type: string
+- name: release_version
+  type: string
+  default: 'latest'
+
+variables:
+  current_date: $[ format('{0:yyyy}_{0:MM}_{0:dd}', pipeline.startTime) ]
+
+name: SDLH Azure SQL Deployment
+
+pr: none
+trigger: none
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- checkout: self
+
+- task: CmdLine@2
+  inputs:
+    script: |
+      git config --local user.email "noreply@ansgroup.co.uk"
+      git config --local user.name $(Build.RequestedFor)
+  displayName: 'Setup Git'
+
+- task: CmdLine@2
+  inputs:
+    script: |
+      if [[ ${{ parameters.release_version }} == "latest" ]]; then
+        git clone -b main --single-branch https://github.com/ans-coe/sdlh-azuresql
+        cd sdlh-azuresql
+        git branch -a
+      else
+        git clone -b ${{ parameters.release_version }} --single-branch https://github.com/ans-coe/sdlh-azuresql
+        cd sdlh-azuresql
+        git branch -a
+      fi
+    workingDirectory: '../'
+  displayName: 'Get Upstream'
+
+- task: CmdLine@2
+  inputs:
+    script: |
+      rm -r database_projects/azure_sql_db
+      cp -r ../sdlh-azuresql/azure_sql_db database_projects/
+    failOnStderr: true
+  displayName: 'Copy Generated Config'
+
+- task: CmdLine@2
+  inputs:
+    script: |
+      if [[ -n $(git status --porcelain) ]]; then
+          echo "There are modified or untracked files."
+          git add .
+          git commit -m "sdlh_updates_$(current_date)"
+          echo "##vso[task.setvariable variable=updates]true"
+      else
+          echo "There are no modified or untracked files."
+          echo "##vso[task.setvariable variable=updates]false"
+      fi
+  displayName: 'Check for Updates'
+
+- task: CmdLine@2
+  inputs:
+    script: |
+      if [ "$(updates)" == "true" ]; then
+          git remote set-url origin $(git remote get-url origin | sed "s|https://[^@]*@dev.azure.com|https://${{ parameters.pat_token }}@dev.azure.com|") 
+          echo "Pushing changes to preview-sdlh-updates branch."
+          git push origin HEAD:refs/heads/preview-sdlh-updates-build$(Build.BuildId)
+      else
+          echo "No updates to push."
+      fi
+  displayName: 'Push Changes'
