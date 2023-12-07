@@ -26,13 +26,12 @@ jobs:
           
       - name: Archive Files
         run: |
-           cd synapse_workspace
            tar -czf SDLH-SQL.tar.gz azure_sql_db/
     
       - name: Create Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: synapse_workspace/SDLH-SQL.tar.gz 
+          artifacts: SDLH-SQL.tar.gz 
           tag: v${{ steps.version.outputs.version }}
           body: |
             Release v${{ steps.version.outputs.version }}
