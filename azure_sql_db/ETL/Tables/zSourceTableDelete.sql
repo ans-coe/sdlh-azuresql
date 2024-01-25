@@ -1,4 +1,4 @@
-﻿CREATE TABLE [ETL].[SourceTable] (
+﻿CREATE TABLE [ETL].[zSourceTableDelete] (
     [TABLE_ID]                        INT           IDENTITY (1, 1) NOT NULL,
     [SOURCE_SYSTEM]                   VARCHAR (150) NULL,
     [DATABASE_NAME]                   VARCHAR (150) NULL,
@@ -15,3 +15,4 @@
     [SERVERLESS_SQL_POOL_SCHEMA]      VARCHAR (100) NULL,
     PRIMARY KEY CLUSTERED ([TABLE_NAME] ASC)
 );
+

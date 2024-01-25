@@ -1,0 +1,27 @@
+﻿CREATE TABLE [ETL].[BaseMetadata] (
+    [ID]                           INT           IDENTITY (1, 1) NOT NULL,
+    [SOURCE_TYPE]                  VARCHAR (150) NOT NULL,
+    [SOURCE_SYSTEM]                VARCHAR (150) NOT NULL,
+    [SOURCE_GROUPING_ID]           INT           NOT NULL,
+    [IS_ENABLED]                   BIT           NOT NULL,
+    [LOAD_TYPE]                    VARCHAR (100) NOT NULL,
+    [BATCH_FREQUENCY]              VARCHAR (100) NOT NULL,
+    [SOURCE_CONNECTION_STRING]     VARCHAR (500) NULL,
+    [DATABASE_NAME]                VARCHAR (150) NULL,
+    [SCHEMA_NAME]                  VARCHAR (150) NULL,
+    [TABLE_NAME]                   VARCHAR (150) NULL,
+    [PRIMARY_KEYS]                 VARCHAR (MAX) NULL,
+    [COLUMNS_TO_EXCLUDE]           VARCHAR (MAX) NULL,
+    [WATERMARK_COLUMN]             VARCHAR (150) NULL,
+    [SERVERLESS_SQL_POOL_DATABASE] VARCHAR (100) NULL,
+    [SERVERLESS_SQL_POOL_SCHEMA]   VARCHAR (100) NULL,
+    [CUSTOM_FIELD_1]               VARCHAR (MAX) NULL,
+    [CUSTOM_FIELD_2]               VARCHAR (MAX) NULL,
+    [CUSTOM_FIELD_3]               VARCHAR (MAX) NULL,
+    [CUSTOM_FIELD_4]               VARCHAR (MAX) NULL,
+    [CUSTOM_FIELD_5]               VARCHAR (MAX) NULL,
+    [CUSTOM_FIELD_6]               VARCHAR (MAX) NULL,
+    [CUSTOM_FIELD_7]               VARCHAR (MAX) NULL,
+    [CUSTOM_FIELD_8]               VARCHAR (MAX) NULL
+);
+

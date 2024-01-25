@@ -61,27 +61,28 @@
     <Folder Include="ETL\Functions\" />
     <Folder Include="ETL\Stored Procedures\" />
     <Folder Include="Security\" />
+    <Folder Include="ETL\Views\" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="ETL\Tables\SourceSchemaVersion.sql" />
-    <Build Include="ETL\Tables\SourceIncrementalLoad.sql" />
-    <Build Include="ETL\Tables\SourceTable.sql" />
     <Build Include="ETL\Tables\JsonMetadata.sql" />
-    <Build Include="ETL\Tables\SourceColumn.sql" />
     <Build Include="ETL\Tables\Log.sql" />
     <Build Include="ETL\Functions\udf_RoundTime.sql" />
     <Build Include="Security\ETL.sql" />
-    <Build Include="ETL\Stored Procedures\usp_WriteWatermark.sql" />
-    <Build Include="ETL\Stored Procedures\usp_WriteSysChangeVersion.sql" />
     <Build Include="ETL\Stored Procedures\usp_UpdateLog.sql" />
-    <Build Include="ETL\Stored Procedures\usp_TruncateMetaAndColumns.sql" />
     <Build Include="ETL\Stored Procedures\usp_InsertLog.sql" />
-    <Build Include="ETL\Stored Procedures\usp_InitializeVersion.sql" />
-    <Build Include="ETL\Stored Procedures\usp_InitializeOrUpdateJsonMeta.sql" />
-    <Build Include="ETL\Stored Procedures\usp_InitializeIncrementalLoad.sql" />
-    <Build Include="ETL\Stored Procedures\usp_GetPipelineTriggerMetadataRetrievalFull.sql" />
-    <Build Include="ETL\Stored Procedures\usp_GetPipelineTriggerMetadataRetrieval.sql" />
-    <Build Include="ETL\Stored Procedures\usp_GetPipelineTriggerMetadata.sql" />
+    <Build Include="ETL\Tables\zSourceTableDelete.sql" />
+    <Build Include="ETL\Tables\SQLTableMetadata.sql" />
+    <Build Include="ETL\Tables\SQLColumnMetadata.sql" />
+    <Build Include="ETL\Tables\LogRowCounts.sql" />
+    <Build Include="ETL\Tables\BaseMetadata.sql" />
+    <Build Include="ETL\Views\vw_LogRowCountsSummary.sql" />
+    <Build Include="ETL\Stored Procedures\usp_SQLUpdateWatermark.sql" />
+    <Build Include="ETL\Stored Procedures\usp_SQLUpdateChangeTracking.sql" />
+    <Build Include="ETL\Stored Procedures\usp_SQLGenerateSchemaVersion.sql" />
+    <Build Include="ETL\Stored Procedures\usp_SQLGenerateJsonMetadata.sql" />
+    <Build Include="ETL\Stored Procedures\usp_InsertLogRowCounts.sql" />
+    <Build Include="ETL\Stored Procedures\usp_GetPipelineMetadataRetrievalFull.sql" />
+    <Build Include="ETL\Stored Procedures\usp_GetPipelineMetadataRetrieval.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="azure_sql_db_test.publish.xml" />
