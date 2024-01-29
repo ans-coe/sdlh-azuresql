@@ -70,7 +70,6 @@
     <Build Include="Security\ETL.sql" />
     <Build Include="ETL\Stored Procedures\usp_UpdateLog.sql" />
     <Build Include="ETL\Stored Procedures\usp_InsertLog.sql" />
-    <Build Include="ETL\Tables\zSourceTableDelete.sql" />
     <Build Include="ETL\Tables\SQLTableMetadata.sql" />
     <Build Include="ETL\Tables\SQLColumnMetadata.sql" />
     <Build Include="ETL\Tables\LogRowCounts.sql" />
