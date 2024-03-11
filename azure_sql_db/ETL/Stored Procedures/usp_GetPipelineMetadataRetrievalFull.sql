@@ -32,6 +32,7 @@ Date        Name            Description
 2023-11-01  Darren Price    Brought inline with data standards
 2023-12-13  Andrei Dumitru  Added description and inline comments
 2024-01-15  Darren Price    Renamed and Uplifted to work with v2.1
+2024-03-01  Darren Price    Changed CASE END AS HNS to set the else to empty. (This allows an SDLH raw path to exclude any date path as a return option)
 ===============================================================
 */
 CREATE PROCEDURE [ETL].[usp_GetPipelineMetadataRetrievalFull] 
@@ -49,7 +50,8 @@ BEGIN
             WHEN BATCH_FREQUENCY = 'Hour' THEN CONCAT(DATEPART(year, @PARAM_DATETIME),'/', FORMAT(@PARAM_DATETIME,'MM') ,'/', FORMAT(@PARAM_DATETIME, 'dd'),'/', FORMAT([ETL].[udf_RoundTime](@PARAM_DATETIME, 1), 'HH'))
             WHEN BATCH_FREQUENCY = 'Day' THEN CONCAT(DATEPART(year, @PARAM_DATETIME),'/', FORMAT(@PARAM_DATETIME,'MM') ,'/', FORMAT(@PARAM_DATETIME, 'dd'))
             WHEN BATCH_FREQUENCY = 'Month' THEN CONCAT(DATEPART(year, @PARAM_DATETIME),'/', FORMAT(@PARAM_DATETIME,'MM'))
-            ELSE CONCAT(DATEPART(year, @PARAM_DATETIME),'/', FORMAT(@PARAM_DATETIME,'MM') ,'/', FORMAT(@PARAM_DATETIME, 'dd'))
+            WHEN BATCH_FREQUENCY = 'Year' THEN CONVERT(VARCHAR(30),DATEPART(year, @PARAM_DATETIME))
+            ELSE ''
         END AS HNS
     FROM [ETL].[JsonMetadata]
     WHERE SOURCE_TYPE = @PARAM_SOURCE_TYPE

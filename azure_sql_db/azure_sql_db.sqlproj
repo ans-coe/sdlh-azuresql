@@ -75,6 +75,9 @@
     <Build Include="ETL\Tables\LogRowCounts.sql" />
     <Build Include="ETL\Tables\BaseMetadata.sql" />
     <Build Include="ETL\Views\vw_LogRowCountsSummary.sql" />
+    <Build Include="ETL\Views\vw_SQLHighWatermarkLast28Days.sql" />
+    <Build Include="ETL\Views\vw_SQLChangeTrackingLast28Days.sql" />
+    <Build Include="ETL\Views\vw_LogExtended.sql" />
     <Build Include="ETL\Stored Procedures\usp_SQLUpdateWatermark.sql" />
     <Build Include="ETL\Stored Procedures\usp_SQLUpdateChangeTracking.sql" />
     <Build Include="ETL\Stored Procedures\usp_SQLGenerateSchemaVersion.sql" />
@@ -82,6 +85,8 @@
     <Build Include="ETL\Stored Procedures\usp_InsertLogRowCounts.sql" />
     <Build Include="ETL\Stored Procedures\usp_GetPipelineMetadataRetrievalFull.sql" />
     <Build Include="ETL\Stored Procedures\usp_GetPipelineMetadataRetrieval.sql" />
+    <Build Include="ETL\Stored Procedures\usp_SQLUpdateColumns.sql" />
+    <Build Include="ETL\Stored Procedures\usp_GetTriggeringPipelineLastRunState.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="azure_sql_db_test.publish.xml" />
