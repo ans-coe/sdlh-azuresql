@@ -22,6 +22,7 @@ Date        Name            Description
 2022-11-01  Andrei Dumitru  Initial create
 2023-11-01  Darren Price    Brought inline with data standards
 2024-01-15  Darren Price    Uplifted to work with v2.1
+2024-01-15  Darren Price    Uplifted to work with v2.1.3, columns removed LAST_UPDATE_USER, LAST_UPDATE_TIME
 ===============================================================
 */
 CREATE PROCEDURE [ETL].[usp_UpdateLog]
@@ -38,7 +39,7 @@ SET NOCOUNT ON;
 IF (@DURATION_SECONDS IS NULL)
 BEGIN
     SELECT @DURATION_SECONDS = DATEDIFF(SS, START_TIME, @END_TIME)
-    FROM   ETL.Log
+    FROM   [ETL].[Log]
     WHERE  LOG_ID = @LOG_ID;
 END
 
@@ -49,6 +50,4 @@ UPDATE [ETL].[Log]
     ,UPDATES = @UPDATES
     ,DELETES = @DELETES
     ,ERROR_MESSAGE = @ERROR_MESSAGE
-    ,LAST_UPDATE_USER = ORIGINAL_LOGIN()
-    ,LAST_UPDATE_TIME = SYSDATETIME()
 WHERE LOG_ID = @LOG_ID;

@@ -56,32 +56,40 @@
   <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <ItemGroup>
     <Folder Include="Properties" />
+    <Folder Include="External Resources\" />
+    <Folder Include="Security\" />
     <Folder Include="ETL\" />
     <Folder Include="ETL\Tables\" />
     <Folder Include="ETL\Functions\" />
     <Folder Include="ETL\Stored Procedures\" />
-    <Folder Include="Security\" />
     <Folder Include="ETL\Views\" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="ETL\Tables\JsonMetadata.sql" />
-    <Build Include="ETL\Tables\Log.sql" />
-    <Build Include="ETL\Functions\udf_RoundTime.sql" />
+    <Build Include="External Resources\cred_managed_identity.sql" />
+    <Build Include="External Resources\exds_blob_metadata.sql" />
     <Build Include="Security\ETL.sql" />
-    <Build Include="ETL\Stored Procedures\usp_UpdateLog.sql" />
-    <Build Include="ETL\Stored Procedures\usp_InsertLog.sql" />
-    <Build Include="ETL\Tables\SQLTableMetadata.sql" />
-    <Build Include="ETL\Tables\SQLColumnMetadata.sql" />
-    <Build Include="ETL\Tables\LogRowCounts.sql" />
-    <Build Include="ETL\Tables\BaseMetadata.sql" />
-    <Build Include="ETL\Views\vw_LogRowCountsSummary.sql" />
-    <Build Include="ETL\Stored Procedures\usp_SQLUpdateWatermark.sql" />
-    <Build Include="ETL\Stored Procedures\usp_SQLUpdateChangeTracking.sql" />
-    <Build Include="ETL\Stored Procedures\usp_SQLGenerateSchemaVersion.sql" />
-    <Build Include="ETL\Stored Procedures\usp_SQLGenerateJsonMetadata.sql" />
-    <Build Include="ETL\Stored Procedures\usp_InsertLogRowCounts.sql" />
+    <Build Include="ETL\Functions\udf_RoundTime.sql" />
     <Build Include="ETL\Stored Procedures\usp_GetPipelineMetadataRetrievalFull.sql" />
     <Build Include="ETL\Stored Procedures\usp_GetPipelineMetadataRetrieval.sql" />
+    <Build Include="ETL\Stored Procedures\usp_GetTriggeringPipelineLastRunState.sql" />
+    <Build Include="ETL\Stored Procedures\usp_InsertLog.sql" />
+    <Build Include="ETL\Stored Procedures\usp_InsertLogRowCounts.sql" />
+    <Build Include="ETL\Stored Procedures\usp_SQLGenerateJsonMetadata.sql" />
+    <Build Include="ETL\Stored Procedures\usp_SQLGenerateSchemaVersion.sql" />
+    <Build Include="ETL\Stored Procedures\usp_SQLUpdateChangeTracking.sql" />
+    <Build Include="ETL\Stored Procedures\usp_SQLUpdateColumns.sql" />
+    <Build Include="ETL\Stored Procedures\usp_SQLUpdateWatermark.sql" />
+    <Build Include="ETL\Stored Procedures\usp_UpdateLog.sql" />
+    <Build Include="ETL\Tables\BaseMetadata.sql" />
+    <Build Include="ETL\Tables\JsonMetadata.sql" />
+    <Build Include="ETL\Tables\Log.sql" />
+    <Build Include="ETL\Tables\LogRowCounts.sql" />
+    <Build Include="ETL\Tables\SQLTableMetadata.sql" />
+    <Build Include="ETL\Tables\SQLColumnMetadata.sql" />
+    <Build Include="ETL\Views\vw_LogExtended.sql" />
+    <Build Include="ETL\Views\vw_LogRowCountsSummary.sql" />
+    <Build Include="ETL\Views\vw_SQLChangeTrackingLast28Days.sql" />
+    <Build Include="ETL\Views\vw_SQLHighWatermarkLast28Days.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="azure_sql_db_test.publish.xml" />

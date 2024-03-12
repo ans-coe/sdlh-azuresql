@@ -1,0 +1,107 @@
+[
+  {
+    "workspaceName": "",
+    "parameterName": "SUBSCRIPTION_ID",
+    "parameterValue": ""
+  },
+  {
+    "workspaceName": "",
+    "parameterName": "MDP_RESOURCE_GROUP",
+    "parameterValue": ""
+  },
+  {
+    "workspaceName": "",
+    "parameterName": "VM_RESOURCE_GROUP",
+    "parameterValue": ""
+  },
+  {
+    "workspaceName": "",
+    "parameterName": "KEY_VAULT_URI",
+    "parameterValue": ""
+  },
+  {
+    "workspaceName": "",
+    "parameterName": "VM_NAME",
+    "parameterValue": ""
+  },
+  {
+    "workspaceName": "",
+    "parameterName": "SQL_POOL_NAME",
+    "parameterValue": ""
+  },
+  {
+    "workspaceName": "",
+    "parameterName": "DATALAKE_STORAGE_NAME",
+    "parameterValue": ""
+  },
+  {
+    "workspaceName": "",
+    "parameterName": "SUBSCRIPTION_ID",
+    "parameterValue": ""
+  },
+  {
+    "workspaceName": "",
+    "parameterName": "MDP_RESOURCE_GROUP",
+    "parameterValue": ""
+  },
+  {
+    "workspaceName": "",
+    "parameterName": "VM_RESOURCE_GROUP",
+    "parameterValue": ""
+  },
+  {
+    "workspaceName": "",
+    "parameterName": "KEY_VAULT_URI",
+    "parameterValue": ""
+  },
+  {
+    "workspaceName": "",
+    "parameterName": "VM_NAME",
+    "parameterValue": ""
+  },
+  {
+    "workspaceName": "",
+    "parameterName": "SQL_POOL_NAME",
+    "parameterValue": ""
+  },
+  {
+    "workspaceName": "",
+    "parameterName": "DATALAKE_STORAGE_NAME",
+    "parameterValue": ""
+  },
+  {
+    "workspaceName": "",
+    "parameterName": "SUBSCRIPTION_ID",
+    "parameterValue": ""
+  },
+  {
+    "workspaceName": "",
+    "parameterName": "MDP_RESOURCE_GROUP",
+    "parameterValue": ""
+  },
+  {
+    "workspaceName": "",
+    "parameterName": "VM_RESOURCE_GROUP",
+    "parameterValue": ""
+  },
+  {
+    "workspaceName": "",
+    "parameterName": "KEY_VAULT_URI",
+    "parameterValue": ""
+  },
+  {
+    "workspaceName": "",
+    "parameterName": "VM_NAME",
+    "parameterValue": ""
+  },
+  {
+    "workspaceName": "",
+    "parameterName": "SQL_POOL_NAME",
+    "parameterValue": ""
+  },
+  {
+    "workspaceName": "",
+    "parameterName": "DATALAKE_STORAGE_NAME",
+    "parameterValue": ""
+  }
+]
