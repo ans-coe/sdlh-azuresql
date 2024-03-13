@@ -6,7 +6,7 @@
     <DeployScriptFileName>AzureSQL.sql</DeployScriptFileName>
     <ProfileVersionNumber>1</ProfileVersionNumber>
     <BlockOnPossibleDataLoss>True</BlockOnPossibleDataLoss>
-    <DropObjectsNotInSource>True</DropObjectsNotInSource>
+    <DropObjectsNotInSource>False</DropObjectsNotInSource>
     <DoNotDropApplicationRoles>True</DoNotDropApplicationRoles>
     <DoNotDropCredentials>True</DoNotDropCredentials>
     <DoNotDropCertificates>True</DoNotDropCertificates>
