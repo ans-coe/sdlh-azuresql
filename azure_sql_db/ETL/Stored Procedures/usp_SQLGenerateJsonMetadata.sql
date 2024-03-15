@@ -25,7 +25,8 @@ Date        Name            Description
 2022-11-01  Andrei Dumitru  Initial create
 2023-11-01  Darren Price    Brought inline with data standards
 2024-01-15  Darren Price    Renamed and Uplifted to work with v2.1
-2024-03-08  Darren Price    Add serverless sql columns with v2.1.3
+2024-03-08  Darren Price    Updated OBJECT_NAME CONCAT to include SOURCE_TYPE for v2.2
+                            Add serverless sql columns with v2.2
 ===============================================================
 */
 CREATE PROCEDURE [ETL].[usp_SQLGenerateJsonMetadata]
@@ -95,9 +96,9 @@ BEGIN
         ,[SERVERLESS_SQL_POOL_DATABASE]
         ,[SERVERLESS_SQL_POOL_SCHEMA]
         ,CASE
-            WHEN UPPER(@PARAM_SOURCE_TYPE) = 'MYSQL' THEN CONCAT(REPLACE(REPLACE(REPLACE(T.SOURCE_SYSTEM,'.','_'), '-','_'), '\', '_'), '_',T.DATABASE_NAME,'_',T.TABLE_NAME)
-            WHEN UPPER(@PARAM_SOURCE_TYPE) = 'MY_SQL' THEN CONCAT(REPLACE(REPLACE(REPLACE(T.SOURCE_SYSTEM,'.','_'), '-','_'), '\', '_'), '_',T.DATABASE_NAME,'_',T.TABLE_NAME)
-            ELSE CONCAT(REPLACE(REPLACE(REPLACE(T.SOURCE_SYSTEM,'.','_'), '-','_'), '\', '_'), '_',T.DATABASE_NAME,'_',T.SCHEMA_NAME, '_',T.TABLE_NAME)
+            WHEN UPPER(@PARAM_SOURCE_TYPE) = 'MYSQL' THEN LOWER(REPLACE(CONCAT(T.SOURCE_TYPE,'_',T.SOURCE_SYSTEM,'_',T.DATABASE_NAME,'_',T.TABLE_NAME),' ', ''))
+            WHEN UPPER(@PARAM_SOURCE_TYPE) = 'MY_SQL' THEN LOWER(REPLACE(CONCAT(T.SOURCE_TYPE,'_',T.SOURCE_SYSTEM,'_',T.DATABASE_NAME,'_',T.TABLE_NAME),' ', ''))
+            ELSE LOWER(REPLACE(CONCAT(T.SOURCE_TYPE,'_',T.SOURCE_SYSTEM,'_',T.DATABASE_NAME,'_',T.SCHEMA_NAME,'_',T.TABLE_NAME),' ', ''))
         END AS [OBJECT_NAME]
         ,(SELECT DISTINCT T.[SOURCE_SYSTEM]
             ,T.[SOURCE_GROUPING_ID]
