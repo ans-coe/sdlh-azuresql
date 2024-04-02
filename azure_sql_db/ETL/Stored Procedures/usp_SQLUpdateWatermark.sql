@@ -27,6 +27,7 @@ Date        Name            Description
 2023-11-01  Darren Price    Brought inline with data standards
 2023-12-13  Andrei Dumitru  Added description and inline comments
 2024-01-15  Darren Price    Renamed and Uplifted to work with v2.1
+2024-03-28  Darren Price    Updated WHERE SCHEMA_NAME ISNULL for MySQL usage
 ===============================================================
 */
 CREATE PROCEDURE [ETL].[usp_SQLUpdateWatermark]
@@ -35,15 +36,15 @@ CREATE PROCEDURE [ETL].[usp_SQLUpdateWatermark]
     @PARAM_DATABASE_NAME VARCHAR(250),
     @PARAM_SCHEMA_NAME VARCHAR(250),
     @PARAM_TABLE_NAME VARCHAR(250),
-    @PARAM_NEW_WATERMARK_VALUE DATETIME2
+    @PARAM_NEW_WATERMARK_VALUE VARCHAR(250)
 AS
 
 BEGIN
     UPDATE [ETL].[SQLTableMetadata]
-    SET [LAST_WATERMARK_VALUE] = @PARAM_NEW_WATERMARK_VALUE
+    SET [LAST_WATERMARK_VALUE] = CAST(@PARAM_NEW_WATERMARK_VALUE AS DATETIME2)
     WHERE [SOURCE_TYPE] = @PARAM_SOURCE_TYPE
     AND [SOURCE_SYSTEM] = @PARAM_SOURCE_SYSTEM
     AND [DATABASE_NAME] = @PARAM_DATABASE_NAME
-    AND [SCHEMA_NAME] = @PARAM_SCHEMA_NAME
+	AND ISNULL([SCHEMA_NAME],'NA') = ISNULL(@PARAM_SCHEMA_NAME,'NA')
     AND [TABLE_NAME] = @PARAM_TABLE_NAME
 END;

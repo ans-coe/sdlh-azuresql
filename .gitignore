@@ -5,3 +5,28 @@
 !.vscode/launch.json
 !.vscode/extensions.json
 *.code-workspace
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# User-specific files (MonoDevelop/Xamarin Studio)
+*.userprefs
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+build/
+bld/
+[Bb]in/
+[Oo]bj/
+out/
+
+# Visual Studio cache/options directory
+.vs/

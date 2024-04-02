@@ -22,9 +22,9 @@ Date        Name            Description
 2022-11-01  Andrei Dumitru  Initial create
 2023-11-01  Darren Price    Brought inline with data standards
 2024-01-15  Darren Price    Uplifted to work with v2.1, columns added DATABASE_NAME, TRIGGERING_PIPELINE_RUN_ID, TRIGGERING_PIPELINE_NAME
-2024-01-15  Darren Price    Uplifted to work with v2.2, columns added SOURCE_TYPE, SOURCE_GROUPING_ID, OBJECT_NAME.
-                                                        columns removed TRIGGER_NAME, INSERT_USER, INSERT_TIME, LAST_UPDATE_USER, LAST_UPDATE_TIME
-                                                        columns renamed INCREMENTAL_KEY_VALUE to NEW_INCREMENTAL_KEY_VALUE 
+2024-01-15  Darren Price    Uplifted to work with v2.1.3, columns added SOURCE_TYPE, SOURCE_GROUPING_ID, OBJECT_NAME.
+                                                          columns removed TRIGGER_NAME, INSERT_USER, INSERT_TIME, LAST_UPDATE_USER, LAST_UPDATE_TIME
+                                                          columns renamed INCREMENTAL_KEY_VALUE to NEW_INCREMENTAL_KEY_VALUE 
 ===============================================================
 */
 CREATE PROCEDURE [ETL].[usp_InsertLog]
