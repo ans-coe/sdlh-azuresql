@@ -22,7 +22,7 @@ Date        Name            Description
 2022-11-01  Andrei Dumitru  Initial create
 2023-11-01  Darren Price    Brought inline with data standards
 2024-01-15  Darren Price    Uplifted to work with v2.1
-2024-01-15  Darren Price    Uplifted to work with v2.2, columns removed LAST_UPDATE_USER, LAST_UPDATE_TIME
+2024-01-15  Darren Price    Uplifted to work with v2.1.3, columns removed LAST_UPDATE_USER, LAST_UPDATE_TIME
 ===============================================================
 */
 CREATE PROCEDURE [ETL].[usp_UpdateLog]
