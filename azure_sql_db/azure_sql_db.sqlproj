@@ -69,6 +69,10 @@
     <Build Include="External Resources\exds_blob_metadata.sql" />
     <Build Include="Security\ETL.sql" />
     <Build Include="ETL\Functions\udf_RoundTime.sql" />
+    <Build Include="ETL\Stored Procedures\usp_GenericGenerateJsonMetadata.sql" />
+    <Build Include="ETL\Stored Procedures\usp_GenericResetHighWatermark.sql" />
+    <Build Include="ETL\Stored Procedures\usp_GenericUpdateTable.sql" />
+    <Build Include="ETL\Stored Procedures\usp_GenericUpdateWatermark.sql" />
     <Build Include="ETL\Stored Procedures\usp_GetPipelineMetadataRetrievalFull.sql" />
     <Build Include="ETL\Stored Procedures\usp_GetPipelineMetadataRetrieval.sql" />
     <Build Include="ETL\Stored Procedures\usp_GetTriggeringPipelineLastRunState.sql" />
@@ -76,11 +80,15 @@
     <Build Include="ETL\Stored Procedures\usp_InsertLogRowCounts.sql" />
     <Build Include="ETL\Stored Procedures\usp_SQLGenerateJsonMetadata.sql" />
     <Build Include="ETL\Stored Procedures\usp_SQLGenerateSchemaVersion.sql" />
+    <Build Include="ETL\Stored Procedures\usp_SQLResetChangeTracking.sql" />
+    <Build Include="ETL\Stored Procedures\usp_SQLResetHighWatermark.sql" />
     <Build Include="ETL\Stored Procedures\usp_SQLUpdateChangeTracking.sql" />
     <Build Include="ETL\Stored Procedures\usp_SQLUpdateColumns.sql" />
     <Build Include="ETL\Stored Procedures\usp_SQLUpdateWatermark.sql" />
     <Build Include="ETL\Stored Procedures\usp_UpdateLog.sql" />
     <Build Include="ETL\Tables\BaseMetadata.sql" />
+    <Build Include="ETL\Tables\GenericColumnMetadata.sql" />
+    <Build Include="ETL\Tables\GenericTableMetadata.sql" />
     <Build Include="ETL\Tables\JsonMetadata.sql" />
     <Build Include="ETL\Tables\Log.sql" />
     <Build Include="ETL\Tables\LogRowCounts.sql" />
