@@ -1,8 +1,8 @@
 ﻿/*
 ===============================================================
-Author: Andrei Dumitru
-Created: 2022-11-01
-Name: usp_SQLGenerateJsonMetadata
+Author: Darren Price
+Created: 2024-05-25
+Name: usp_GenericGenerateJsonMetadata
 Description:	 
     This stored procedure is ran from within SDLH ingestion pipelines in Azure Synapse Analytics.
     It takes in 2 parameters extracted from Synapse using pipeline dynamic expressions:
@@ -11,7 +11,7 @@ Description:
    - @PARAM_SOURCE_SYSTEM (STR): Passed in parameter for required source system. Pipeline dynamic expression: @pipeline().parameters.PARAM_SOURCE_SYSTEM
 
     It INSERTS or UPDATES via MERGE statement into table ETL.JsonMetadata
-    Based on data selected and joined from [ETL].[SQLTableMetadata] and [ETL].[SQLColumnMetadata]
+    Based on data selected and joined from [ETL].[SalesforceTableMetadata] and [ETL].[SalesforceColumnMetadata]
     Selects SOURCE_TYPE, SOURCE_SYSTEM, SOURCE_GROUPING_ID, IS_ENABLED, LOAD_TYPE, BATCH_FREQUENCY
     Generates 3 new columns, OBJECT_NAME and 2 new json based columns ( OBJECT_PARAMETERS & ADLS_PATHS ) 
     
@@ -22,15 +22,10 @@ Description:
 Change History
 
 Date        Name            Description
-2022-11-01  Andrei Dumitru  Initial create
-2023-11-01  Darren Price    Brought inline with data standards
-2024-01-15  Darren Price    Renamed and Uplifted to work with v2.1
-2024-03-08  Darren Price    Updated OBJECT_NAME CONCAT to include SOURCE_TYPE for v2.2
-                            Add serverless sql columns with v2.2
-2024-05-25  Darren Price    Added LOWER to COLUMN_NAME, added SOURCE_TYPE to MERGE matching
+2024-05-25  Darren Price    Initial create
 ===============================================================
 */
-CREATE PROCEDURE [ETL].[usp_SQLGenerateJsonMetadata]
+CREATE PROCEDURE [ETL].[usp_GenericGenerateJsonMetadata]
     @PARAM_SOURCE_TYPE VARCHAR(150),
     @PARAM_SOURCE_SYSTEM VARCHAR(150)
 
@@ -38,51 +33,40 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    -- CREATING IN-MEMORY TABLE FOR STORING PARAMETERS ABOUT THE OBJECT
+-- CREATING IN-MEMORY TABLE FOR STORING PARAMETERS ABOUT THE OBJECT
     WITH cte_object_params AS (
         SELECT T.[SOURCE_TYPE]
             ,T.[SOURCE_SYSTEM]
-            ,T.[DATABASE_NAME]
-            ,T.[SCHEMA_NAME]
             ,T.[TABLE_NAME]
-            ,T.[SCHEMA_VERSION]
+            ,0 AS [SCHEMA_VERSION] --SCHEMA_VERSION_FIX
             ,T.[PRIMARY_KEYS]
             ,T.[COLUMNS_META]
-            ,T.[COLUMNS_META_CHANGE_TRACKING]
-            ,T.[CHANGE_TRACKING_JOIN_CONDITION]
-            ,(SELECT LOWER(C.[COLUMN_NAME]) AS [COLUMN_NAME]
-                ,C.[IS_NULLABLE]
+            ,T.[COLUMNS_LIST]
+            ,(SELECT C.[COLUMN_NAME]
                 ,C.[DATA_TYPE]
                 ,C.[CHARACTER_MAXIMUM_LENGTH]
-                ,C.[COLLATION_NAME]
-            FROM [ETL].[SQLColumnMetadata] C
-            WHERE C.[SOURCE_SYSTEM] = T.[SOURCE_SYSTEM]
-            AND C.[DATABASE_NAME] = T.[DATABASE_NAME]
-            AND ISNULL(C.[SCHEMA_NAME],'NA') = ISNULL(T.[SCHEMA_NAME],'NA')
+            FROM [ETL].[GenericColumnMetadata] C
+            WHERE C.[SOURCE_TYPE] = T.[SOURCE_TYPE]
+            AND C.[SOURCE_SYSTEM] = T.[SOURCE_SYSTEM]
             AND C.[TABLE_NAME] = T.[TABLE_NAME]
             AND C.[IS_ENABLED] = 1
             FOR JSON PATH) AS [INFORMATION_SCHEMA]
-        FROM [ETL].[SQLTableMetadata] T
+        FROM [ETL].[GenericTableMetadata] T
         WHERE T.[SOURCE_TYPE] = @PARAM_SOURCE_TYPE
         AND T.[SOURCE_SYSTEM] = @PARAM_SOURCE_SYSTEM
     ),
 
     cte_adls_paths AS (
-        SELECT [SOURCE_SYSTEM]
-            ,[DATABASE_NAME]
-            ,[SCHEMA_NAME]
+        SELECT [SOURCE_TYPE]
+            ,[SOURCE_SYSTEM]
             ,[TABLE_NAME]
             ,(SELECT DISTINCT 'raw' AS [FP0]
-                ,CASE
-                    WHEN UPPER(SOURCE_TYPE) = 'MYSQL' THEN CONCAT(REPLACE(REPLACE(REPLACE([SOURCE_SYSTEM],'.','_'),'-','_'),'\', '_'),'/',[DATABASE_NAME],'/',[TABLE_NAME],'/',[SCHEMA_VERSION],'/')
-                    WHEN UPPER(SOURCE_TYPE) = 'MY_SQL' THEN CONCAT(REPLACE(REPLACE(REPLACE([SOURCE_SYSTEM],'.','_'),'-','_'),'\', '_'),'/',[DATABASE_NAME],'/',[TABLE_NAME],'/',[SCHEMA_VERSION],'/')
-                ELSE CONCAT(REPLACE(REPLACE(REPLACE([SOURCE_SYSTEM],'.','_'), '-','_'),'\', '_'),'/',[DATABASE_NAME],'/',[SCHEMA_NAME],'/',[TABLE_NAME],'/',[SCHEMA_VERSION],'/')
-                END AS [FP1]
+            ,CONCAT(SOURCE_SYSTEM,'/',TABLE_NAME,'/','0','/') AS [FP1] --SCHEMA_VERSION_FIX
             FOR JSON PATH) AS [raw]
             ,(SELECT 'enriched' AS [FP0]
-                ,CONCAT([SERVERLESS_SQL_POOL_DATABASE],'/',[SERVERLESS_SQL_POOL_SCHEMA],'/',[TABLE_NAME],'/' ) AS [FP1]
+            ,CONCAT([SERVERLESS_SQL_POOL_DATABASE],'/',[SERVERLESS_SQL_POOL_SCHEMA],'/',[TABLE_NAME],'/' ) AS [FP1]
             FOR JSON PATH) as [staged]
-        FROM [ETL].[SQLTableMetadata]
+        FROM [ETL].[GenericTableMetadata]
         WHERE [SOURCE_TYPE] = @PARAM_SOURCE_TYPE
         AND [SOURCE_SYSTEM] = @PARAM_SOURCE_SYSTEM
     )
@@ -97,41 +81,30 @@ BEGIN
         ,[BATCH_FREQUENCY]
         ,[SERVERLESS_SQL_POOL_DATABASE]
         ,[SERVERLESS_SQL_POOL_SCHEMA]
-        ,CASE
-            WHEN UPPER(@PARAM_SOURCE_TYPE) = 'MYSQL' THEN LOWER(REPLACE(CONCAT(T.[SOURCE_TYPE],'_',T.[SOURCE_SYSTEM],'_',T.[DATABASE_NAME],'_',T.[TABLE_NAME]),' ', ''))
-            WHEN UPPER(@PARAM_SOURCE_TYPE) = 'MY_SQL' THEN LOWER(REPLACE(CONCAT(T.[SOURCE_TYPE],'_',T.[SOURCE_SYSTEM],'_',T.[DATABASE_NAME],'_',T.[TABLE_NAME]),' ', ''))
-            ELSE LOWER(REPLACE(CONCAT(T.[SOURCE_TYPE],'_',T.[SOURCE_SYSTEM],'_',T.[DATABASE_NAME],'_',T.[SCHEMA_NAME],'_',T.[TABLE_NAME]),' ', ''))
-        END AS [OBJECT_NAME]
+        ,LOWER(REPLACE(CONCAT(T.[SOURCE_TYPE],'_',T.[SOURCE_SYSTEM],'_',T.[TABLE_NAME]),' ', '')) AS [OBJECT_NAME]
         ,(SELECT DISTINCT T.[SOURCE_TYPE]
             ,T.[SOURCE_SYSTEM]
             ,T.[SOURCE_GROUPING_ID]
-            ,T.[SOURCE_CONNECTION_STRING]
-            ,T.[DATABASE_NAME]
-            ,T.[SCHEMA_NAME]
             ,T.[TABLE_NAME]
             ,T.[PRIMARY_KEYS]
-            ,T.[SCHEMA_VERSION]
+            ,0 AS [SCHEMA_VERSION] --SCHEMA_VERSION_FIX
             ,T.[COLUMNS_META]
             ,T.[COLUMNS_LIST]
-            ,T.[COLUMNS_META_CHANGE_TRACKING]
-            ,T.[CHANGE_TRACKING_JOIN_CONDITION]
             ,T.[SERVERLESS_SQL_POOL_DATABASE]
             ,T.[SERVERLESS_SQL_POOL_SCHEMA]
             ,OBP.[INFORMATION_SCHEMA]
         FROM cte_object_params OBP
-        WHERE T.[SOURCE_SYSTEM] = OBP.[SOURCE_SYSTEM]
-        AND T.[DATABASE_NAME] = OBP.[DATABASE_NAME]
-        AND ISNULL(T.[SCHEMA_NAME],'NA') = ISNULL(OBP.SCHEMA_NAME,'NA')
+        WHERE T.[SOURCE_TYPE] = OBP.[SOURCE_TYPE]
+        AND T.[SOURCE_SYSTEM] = OBP.[SOURCE_SYSTEM]
         AND T.[TABLE_NAME] = OBP.[TABLE_NAME]
         FOR JSON PATH ) AS [OBJECT_PARAMETERS]
         ,(SELECT [raw], [staged]
         FROM cte_adls_paths ADLS
-        WHERE T.[SOURCE_SYSTEM] = ADLS.[SOURCE_SYSTEM]
-        AND T.[DATABASE_NAME] = ADLS.[DATABASE_NAME]
-        AND ISNULL(T.[SCHEMA_NAME],'NA') = ISNULL(ADLS.[SCHEMA_NAME],'NA')
+        WHERE T.[SOURCE_TYPE] = ADLS.[SOURCE_TYPE]
+        AND T.[SOURCE_SYSTEM] = ADLS.[SOURCE_SYSTEM]
         AND T.[TABLE_NAME] = ADLS.[TABLE_NAME]
         FOR JSON PATH) AS [ADLS_PATHS]
-    FROM [ETL].[SQLTableMetadata] T) AS source
+    FROM [ETL].[GenericTableMetadata] T) AS source        
         ON (target.OBJECT_NAME = source.OBJECT_NAME)
     WHEN MATCHED
     AND source.SOURCE_TYPE = @PARAM_SOURCE_TYPE
