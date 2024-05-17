@@ -69,6 +69,7 @@
     <Build Include="External Resources\exds_blob_metadata.sql" />
     <Build Include="Security\ETL.sql" />
     <Build Include="ETL\Functions\udf_RoundTime.sql" />
+    <Build Include="ETL\Stored Procedures\usp_GenericDropTempTable.sql" />
     <Build Include="ETL\Stored Procedures\usp_GenericGenerateJsonMetadata.sql" />
     <Build Include="ETL\Stored Procedures\usp_GenericResetHighWatermark.sql" />
     <Build Include="ETL\Stored Procedures\usp_GenericUpdateTable.sql" />
