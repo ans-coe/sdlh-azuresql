@@ -1,4 +1,5 @@
-﻿CREATE VIEW [ETL].[vw_SQLHighWatermarkLast28Days] AS
+﻿
+CREATE VIEW [ETL].[vw_HighWatermarkLast28Days] AS
 WITH cte_get_changes_copy_activity AS (
     SELECT [LOG_ID]
         ,[TRIGGERING_PIPELINE_RUN_ID]
@@ -10,7 +11,7 @@ WITH cte_get_changes_copy_activity AS (
         ,[TRIGGER_TIME]
         ,[PREVIOUS_INCREMENTAL_KEY_VALUE]
     FROM [ETL].[Log]
-    WHERE [COMPONENT_NAME] = 'copy_sql_to_raw_watermark'
+    WHERE [COMPONENT_NAME] like '%_to_raw_watermark'
     AND [TRIGGER_TIME] >= DATEADD(DAY,-28,GETDATE())
 ),
 

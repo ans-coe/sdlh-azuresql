@@ -11,6 +11,10 @@
     [CUSTOM_FIELD_1]           VARCHAR (MAX)  NULL,
     [CUSTOM_FIELD_2]           VARCHAR (MAX)  NULL,
     [CUSTOM_FIELD_3]           VARCHAR (MAX)  NULL,
-    [CUSTOM_FIELD_4]           VARCHAR (MAX)  NULL
+    [CUSTOM_FIELD_4]           VARCHAR (MAX)  NULL,
+    [CUSTOM_FIELD_5]           VARCHAR (MAX)  NULL,
+    [CUSTOM_FIELD_6]           VARCHAR (MAX)  NULL,
+    [CUSTOM_FIELD_7]           VARCHAR (MAX)  NULL,
+    [CUSTOM_FIELD_8]           VARCHAR (MAX)  NULL
 );
 
