@@ -23,11 +23,14 @@ Change History
 
 Date        Name            Description
 2024-05-25  Darren Price    Initial create
+2024-10-04  Darren Price    Added parameters for datalake container naming
 ===============================================================
 */
 CREATE PROCEDURE [ETL].[usp_GenericGenerateJsonMetadata]
     @PARAM_SOURCE_TYPE VARCHAR(150),
-    @PARAM_SOURCE_SYSTEM VARCHAR(150)
+    @PARAM_SOURCE_SYSTEM VARCHAR(150),
+    @PARAM_CONTAINER_NAME_RAW VARCHAR(150) = 'raw',
+    @PARAM_CONTAINER_NAME_ENRICHED VARCHAR(150) = 'enriched'
 
 AS
 BEGIN
@@ -60,10 +63,10 @@ BEGIN
         SELECT [SOURCE_TYPE]
             ,[SOURCE_SYSTEM]
             ,[TABLE_NAME]
-            ,(SELECT DISTINCT 'raw' AS [FP0]
+            ,(SELECT DISTINCT @PARAM_CONTAINER_NAME_RAW AS [FP0]
             ,CONCAT(SOURCE_SYSTEM,'/',TABLE_NAME,'/','0','/') AS [FP1] --SCHEMA_VERSION_FIX
             FOR JSON PATH) AS [raw]
-            ,(SELECT 'enriched' AS [FP0]
+            ,(SELECT @PARAM_CONTAINER_NAME_ENRICHED AS [FP0]
             ,CONCAT([SERVERLESS_SQL_POOL_DATABASE],'/',[SERVERLESS_SQL_POOL_SCHEMA],'/',[TABLE_NAME],'/' ) AS [FP1]
             FOR JSON PATH) as [staged]
         FROM [ETL].[GenericTableMetadata]
