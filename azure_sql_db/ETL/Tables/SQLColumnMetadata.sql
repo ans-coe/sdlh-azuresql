@@ -11,6 +11,7 @@
     [IS_NULLABLE]              NVARCHAR (150) NULL,
     [DATA_TYPE]                NVARCHAR (150) NULL,
     [CHARACTER_MAXIMUM_LENGTH] BIGINT         NULL,
-    [COLLATION_NAME]           NVARCHAR (150) NULL
+    [COLLATION_NAME]           NVARCHAR (150) NULL,
+    [ORDINAL_POSITION]         INT            NULL
 );
 
