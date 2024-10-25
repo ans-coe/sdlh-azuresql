@@ -31,6 +31,7 @@ Date        Name            Description
 2024-10-04  Darren Price    Added ORDER BY [ORDINAL_POSITION] to correct order the [INFORMATION_SCHEMA]
 2024-10-04  Darren Price    Added parameters for datalake container naming
 2024-10-10  Darren Price    Removed section to LOWER column namings within [INFORMATION_SCHEMA]
+2024-10-21  Andrei Dumitru  Added WATERMARK_COLUMN in OBJECT_PARAMETERS to suppport CDC.
 ===============================================================
 */
 CREATE PROCEDURE [ETL].[usp_SQLGenerateJsonMetadata]
@@ -52,6 +53,7 @@ BEGIN
             ,T.[TABLE_NAME]
             ,T.[SCHEMA_VERSION]
             ,T.[PRIMARY_KEYS]
+			,T.[WATERMARK_COLUMN]
             ,T.[COLUMNS_META]
             ,T.[COLUMNS_META_CHANGE_TRACKING]
             ,T.[CHANGE_TRACKING_JOIN_CONDITION]
@@ -116,6 +118,7 @@ BEGIN
             ,T.[SCHEMA_NAME]
             ,T.[TABLE_NAME]
             ,T.[PRIMARY_KEYS]
+			,T.[WATERMARK_COLUMN]
             ,T.[SCHEMA_VERSION]
             ,T.[COLUMNS_META]
             ,T.[COLUMNS_LIST]
