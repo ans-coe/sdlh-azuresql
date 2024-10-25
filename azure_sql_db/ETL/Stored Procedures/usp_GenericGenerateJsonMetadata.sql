@@ -24,6 +24,7 @@ Change History
 Date        Name            Description
 2024-05-25  Darren Price    Initial create
 2024-10-04  Darren Price    Added parameters for datalake container naming
+2024-10-21  Andrei Dumitru  Added WATERMARK_COLUMN in OBJECT_PARAMETERS to suppport CDC.
 ===============================================================
 */
 CREATE PROCEDURE [ETL].[usp_GenericGenerateJsonMetadata]
@@ -43,6 +44,7 @@ BEGIN
             ,T.[TABLE_NAME]
             ,0 AS [SCHEMA_VERSION] --SCHEMA_VERSION_FIX
             ,T.[PRIMARY_KEYS]
+			,T.[WATERMARK_COLUMN]
             ,T.[COLUMNS_META]
             ,T.[COLUMNS_LIST]
             ,(SELECT C.[COLUMN_NAME]
@@ -90,6 +92,7 @@ BEGIN
             ,T.[SOURCE_GROUPING_ID]
             ,T.[TABLE_NAME]
             ,T.[PRIMARY_KEYS]
+			,T.[WATERMARK_COLUMN]
             ,0 AS [SCHEMA_VERSION] --SCHEMA_VERSION_FIX
             ,T.[COLUMNS_META]
             ,T.[COLUMNS_LIST]
