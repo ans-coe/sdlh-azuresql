@@ -16,6 +16,7 @@
     [COLUMNS_META]                 VARCHAR (MAX) NULL,
     [INFORMATION_SCHEMA]           VARCHAR (MAX) NULL,
     [LAST_WATERMARK_VALUE]         DATETIME2 (7) NULL,
+	[ETL_ACTION_COLUMN]            VARCHAR (150) NULL,
     [CUSTOM_FIELD_1]               VARCHAR (MAX) NULL,
     [CUSTOM_FIELD_2]               VARCHAR (MAX) NULL,
     [CUSTOM_FIELD_3]               VARCHAR (MAX) NULL,
