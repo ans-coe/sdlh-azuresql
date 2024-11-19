@@ -21,6 +21,7 @@
     [INFORMATION_SCHEMA]             VARCHAR (MAX) NULL,
     [SCHEMA_VERSION]                 INT           NULL,
     [LAST_CHANGE_TRACKING_VALUE]     BIGINT        NULL,
-    [LAST_WATERMARK_VALUE]           DATETIME2 (7) NULL
+    [LAST_WATERMARK_VALUE]           DATETIME2 (7) NULL,
+	[ETL_ACTION_COLUMN]              VARCHAR (150) NULL
 );
 
