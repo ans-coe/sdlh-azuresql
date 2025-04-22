@@ -1,4 +1,4 @@
-﻿/*
+/*
 ===============================================================
 Author: Andrei Dumitru
 Created: 2022-11-01
@@ -28,17 +28,12 @@ Date        Name            Description
 2024-03-08  Darren Price    Updated OBJECT_NAME CONCAT to include SOURCE_TYPE for v2.2
                             Add serverless sql columns with v2.2
 2024-05-25  Darren Price    Added LOWER to COLUMN_NAME, added SOURCE_TYPE to MERGE matching
-2024-10-04  Darren Price    Added ORDER BY [ORDINAL_POSITION] to correct order the [INFORMATION_SCHEMA]
-2024-10-04  Darren Price    Added parameters for datalake container naming
-2024-10-10  Darren Price    Removed section to LOWER column namings within [INFORMATION_SCHEMA]
-2024-10-21  Andrei Dumitru  Added WATERMARK_COLUMN in OBJECT_PARAMETERS to suppport CDC.
+2025-04-22  Jason Rogers    Added extra condition on cte_object_params join (SOURCE_TYPE)
 ===============================================================
 */
 CREATE PROCEDURE [ETL].[usp_SQLGenerateJsonMetadata]
     @PARAM_SOURCE_TYPE VARCHAR(150),
-    @PARAM_SOURCE_SYSTEM VARCHAR(150),
-    @PARAM_CONTAINER_NAME_RAW VARCHAR(150) = 'raw',
-    @PARAM_CONTAINER_NAME_ENRICHED VARCHAR(150) = 'enriched'
+    @PARAM_SOURCE_SYSTEM VARCHAR(150)
 
 AS
 BEGIN
@@ -53,22 +48,21 @@ BEGIN
             ,T.[TABLE_NAME]
             ,T.[SCHEMA_VERSION]
             ,T.[PRIMARY_KEYS]
-			,T.[WATERMARK_COLUMN]
             ,T.[COLUMNS_META]
             ,T.[COLUMNS_META_CHANGE_TRACKING]
             ,T.[CHANGE_TRACKING_JOIN_CONDITION]
-            ,(SELECT C.[COLUMN_NAME]
+            ,(SELECT LOWER(C.[COLUMN_NAME]) AS [COLUMN_NAME]
                 ,C.[IS_NULLABLE]
                 ,C.[DATA_TYPE]
                 ,C.[CHARACTER_MAXIMUM_LENGTH]
                 ,C.[COLLATION_NAME]
             FROM [ETL].[SQLColumnMetadata] C
             WHERE C.[SOURCE_SYSTEM] = T.[SOURCE_SYSTEM]
+            AND C.[SOURCE_TYPE] = T.[SOURCE_TYPE]
             AND C.[DATABASE_NAME] = T.[DATABASE_NAME]
             AND ISNULL(C.[SCHEMA_NAME],'NA') = ISNULL(T.[SCHEMA_NAME],'NA')
             AND C.[TABLE_NAME] = T.[TABLE_NAME]
             AND C.[IS_ENABLED] = 1
-			ORDER BY C.[ORDINAL_POSITION] ASC
             FOR JSON PATH) AS [INFORMATION_SCHEMA]
         FROM [ETL].[SQLTableMetadata] T
         WHERE T.[SOURCE_TYPE] = @PARAM_SOURCE_TYPE
@@ -80,14 +74,14 @@ BEGIN
             ,[DATABASE_NAME]
             ,[SCHEMA_NAME]
             ,[TABLE_NAME]
-            ,(SELECT DISTINCT @PARAM_CONTAINER_NAME_RAW AS [FP0]
+            ,(SELECT DISTINCT 'raw' AS [FP0]
                 ,CASE
                     WHEN UPPER(SOURCE_TYPE) = 'MYSQL' THEN CONCAT(REPLACE(REPLACE(REPLACE([SOURCE_SYSTEM],'.','_'),'-','_'),'\', '_'),'/',[DATABASE_NAME],'/',[TABLE_NAME],'/',[SCHEMA_VERSION],'/')
                     WHEN UPPER(SOURCE_TYPE) = 'MY_SQL' THEN CONCAT(REPLACE(REPLACE(REPLACE([SOURCE_SYSTEM],'.','_'),'-','_'),'\', '_'),'/',[DATABASE_NAME],'/',[TABLE_NAME],'/',[SCHEMA_VERSION],'/')
                 ELSE CONCAT(REPLACE(REPLACE(REPLACE([SOURCE_SYSTEM],'.','_'), '-','_'),'\', '_'),'/',[DATABASE_NAME],'/',[SCHEMA_NAME],'/',[TABLE_NAME],'/',[SCHEMA_VERSION],'/')
                 END AS [FP1]
             FOR JSON PATH) AS [raw]
-            ,(SELECT @PARAM_CONTAINER_NAME_ENRICHED AS [FP0]
+            ,(SELECT 'enriched' AS [FP0]
                 ,CONCAT([SERVERLESS_SQL_POOL_DATABASE],'/',[SERVERLESS_SQL_POOL_SCHEMA],'/',[TABLE_NAME],'/' ) AS [FP1]
             FOR JSON PATH) as [staged]
         FROM [ETL].[SQLTableMetadata]
@@ -118,7 +112,6 @@ BEGIN
             ,T.[SCHEMA_NAME]
             ,T.[TABLE_NAME]
             ,T.[PRIMARY_KEYS]
-			,T.[WATERMARK_COLUMN]
             ,T.[SCHEMA_VERSION]
             ,T.[COLUMNS_META]
             ,T.[COLUMNS_LIST]
